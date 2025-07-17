@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.getElementById('toQuestions').addEventListener('click', () => {
-    const {company, first_name, email} = form.elements;
+    const {company,last_name, first_name, email} = form.elements;
     if(!company.value.trim() || !last_name.value.trim() || !first_name.value.trim() || !email.value.trim())
       return alertMsg('すべての項目を入力してください');
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value))
