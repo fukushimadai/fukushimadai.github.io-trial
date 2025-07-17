@@ -1,12 +1,128 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>AI 適合度 簡易診断フォーム</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<style>
+  body{font-family:sans-serif;margin:2rem;background:#f4f6f9;}
+  .card{max-width:640px;margin:0 auto;background:#fff;padding:2rem 2.5rem;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.08);}
+  [hidden]{display:none !important;} 
+  button{padding:.6rem 1.4rem;border:none;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;transition:.25s;box-shadow:0 2px 6px rgba(0,0,0,.12);}  
+  button.primary{background:#0b62f3;color:#fff;}
+  button.primary:hover{background:#054ec4;}
+  fieldset{border:none;margin:1.2rem 0;}
+  legend{font-weight:bold;margin-bottom:.4rem;}
+  label{display:inline-block;margin-right:1.4rem;cursor:pointer;}
+</style>
 </head>
 <body>
-    <p>やってみよう</p>
+
+<div class="card">
+  <h2>AI 適合度 簡易診断</h2>
+  <form id="diagForm" novalidate>
+
+    <!-- Step 1: 基本情報入力 -->
+    <section id="step1">
+      <fieldset>
+        <legend>貴社情報</legend>
+        <input name="company" placeholder="会社名" required style="width:100%;padding:.55rem;margin:.6rem 0;">
+        <input name="last_name" placeholder="ご担当者姓" required style="width:100%;padding:.55rem;margin:.6rem 0;">
+        <input name="first_name" placeholder="ご担当者名" required style="width:100%;padding:.55rem;margin:.6rem 0;">
+        <input type="email" name="email" placeholder="メールアドレス" required style="width:100%;padding:.55rem;margin:.6rem 0;">
+      </fieldset>
+      <button type="button" id="toQuestions" class="primary">次へ</button>
+    </section>
+
+    <!-- Step 2: 質問 -->
+    <section id="step2" hidden>
+      <fieldset>
+        <legend>Q1. 現在 AI ツールを業務で利用していますか？</legend>
+        <label><input type="radio" name="Q1" value="yes"> はい</label>
+        <label><input type="radio" name="Q1" value="no"> いいえ</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Q2. AI 活用の主目的はどちらに近いですか？</legend>
+        <label><input type="radio" name="Q2" value="automation"> 業務効率向上</label>
+        <label><input type="radio" name="Q2" value="newbiz"> 新規ビジネス創出</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Q3. 社内データの整備状況は？</legend>
+        <label><input type="radio" name="Q3" value="ready"> 整備済み</label>
+        <label><input type="radio" name="Q3" value="notready"> まだ</label>
+      </fieldset>
+
+      <input type="hidden" name="AI_Fit_Level" id="fit">
+      <button type="button" id="diagnoseBtn" class="primary">診断する</button>
+    </section>
+
+    <!-- Step 3: 結果 -->
+    <section id="result" hidden>
+      <h3 id="resultTitle" style="margin-top:0"></h3>
+      <p id="resultText"></p>
+      <button type="button" id="restart">最初に戻る</button>
+    </section>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form      = document.getElementById('diagForm');
+  const step1El   = document.getElementById('step1');
+  const step2El   = document.getElementById('step2');
+  const resultEl  = document.getElementById('result');
+  const titleEl   = document.getElementById('resultTitle');
+
+  const alertMsg = msg => {
+    console.warn(msg);
+    alert(msg);
+  };
+
+  document.getElementById('toQuestions').addEventListener('click', () => {
+    const {company, first_name, email} = form.elements;
+    if(!company.value.trim() || !last_name.value.trim() || !first_name.value.trim() || !email.value.trim())
+      return alertMsg('すべての項目を入力してください');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value))
+      return alertMsg('正しいメールアドレスを入力してください');
+
+    step1El.hidden = true;
+    step2El.hidden = false;
+  });
+
+  // 診断ボタン（type=button）で実行
+  document.getElementById('diagnoseBtn').addEventListener('click', () => {
+    const get = name => form.querySelector(`input[name="${name}"]:checked`)?.value;
+    const q1 = get('Q1');
+    const q2 = get('Q2');
+    const q3 = get('Q3');
+    if(!q1 || !q2 || !q3) return alertMsg('すべての質問に回答してください');
+
+    const score = (q1==='yes') + (q2==='automation') + (q3==='ready');
+    const fit   = score >= 2 ? 'High' : 'Low';
+    form.fit.value = fit;
+
+    titleEl.textContent = fit==='High' ? 'AI活用向いてるよ！' : 'AI活用向いてないよ！';
+    step2El.hidden = true;
+    resultEl.hidden = false;
+
+    // 送信
+    const fd = new FormData(form);
+    fd.set('AI_Fit_Level', fit);
+    fetch('http://go.demo.pardot.com/l/1060813/2025-07-17/3gl9jj', {
+      method:'POST', mode:'no-cors', body:fd
+    }).catch(console.error);
+  });
+
+  document.getElementById('restart').addEventListener('click', () => {
+    resultEl.hidden = true;
+    step1El.hidden  = false;
+    form.reset();
+  });
+});
+</script>
 </body>
 </html>
