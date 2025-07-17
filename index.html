@@ -109,9 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
     step2El.hidden = true;
     resultEl.hidden = false;
 
-  // 1.5秒待ってから送信
-  setTimeout(() => form.submit(), 1500);
-  });
+  // 1.5秒待って送信→さらに1秒後にリダイレクト
+  setTimeout(() => {
+    form.submit();
+    setTimeout(() => window.location.href = 'thanks.html', 1000);
+  }, 1500);
 });
 </script>
 </body>
