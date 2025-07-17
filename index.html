@@ -64,7 +64,6 @@
     <section id="result" hidden>
       <h3 id="resultTitle" style="margin-top:0"></h3>
       <p id="resultText"></p>
-      <button type="button" id="restart">最初に戻る</button>
     </section>
   </form>
 </div>
@@ -112,12 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1.5秒待ってから送信
   setTimeout(() => form.submit(), 1500);
-  });
-
-  document.getElementById('restart').addEventListener('click', () => {
-    resultEl.hidden = true;
-    step1El.hidden  = false;
-    form.reset();
   });
 });
 </script>
