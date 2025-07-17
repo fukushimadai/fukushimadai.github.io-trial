@@ -22,7 +22,7 @@
 
 <div class="card">
   <h2>AI 適合度 簡易診断</h2>
-  <form id="diagForm" novalidate>
+  <form action="http://go.demo.pardot.com/l/1060813/2025-07-17/3gl9jj" method="post">
 
     <!-- Step 1: 基本情報入力 -->
     <section id="step1">
@@ -109,12 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
     step2El.hidden = true;
     resultEl.hidden = false;
 
-    // 送信
-    const fd = new FormData(form);
-    fd.set('AI_Fit_Level', fit);
-    fetch('http://go.demo.pardot.com/l/1060813/2025-07-17/3gl9jj', {
-      method:'POST', mode:'no-cors', body:fd
-    }).catch(console.error);
+  // 1.5秒待ってから送信
+  setTimeout(() => form.submit(), 1500);
   });
 
   document.getElementById('restart').addEventListener('click', () => {
