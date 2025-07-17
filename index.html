@@ -22,19 +22,19 @@
 
 <div class="card">
   <h2>AI 適合度 簡易診断</h2>
-  <form action="https://go.demo.pardot.com/l/1060813/2025-07-17/3gl9jj" method="post">
+<form id="diagForm" action="https://go.demo.pardot.com/l/1060813/2025-07-17/3gl9jj" method="post">
 
-    <!-- Step 1: 基本情報入力 -->
-    <section id="step1">
-      <fieldset>
-        <legend>貴社情報</legend>
-        <input name="company" placeholder="会社名" required style="width:100%;padding:.55rem;margin:.6rem 0;">
-        <input name="last_name" placeholder="ご担当者姓" required style="width:100%;padding:.55rem;margin:.6rem 0;">
-        <input name="first_name" placeholder="ご担当者名" required style="width:100%;padding:.55rem;margin:.6rem 0;">
-        <input type="email" name="email" placeholder="メールアドレス" required style="width:100%;padding:.55rem;margin:.6rem 0;">
-      </fieldset>
-      <button type="button" id="toQuestions" class="primary">次へ</button>
-    </section>
+  <!-- Step 1: 基本情報入力 -->
+  <section>
+　  <fieldset>
+    <legend>貴社情報</legend>
+    <input name="company" placeholder="会社名" required autocomplete="organization" style="width:100%;padding:.55rem;margin:.6rem 0;">
+    <input name="last_name" placeholder="ご担当者姓" required autocomplete="family-name" style="width:100%;padding:.55rem;margin:.6rem 0;">
+    <input name="first_name" placeholder="ご担当者名" required autocomplete="given-name" style="width:100%;padding:.55rem;margin:.6rem 0;">
+    <input type="email" name="email" placeholder="メールアドレス" required autocomplete="email" style="width:100%;padding:.55rem;margin:.6rem 0;">
+　  </fieldset>
+　    <button type="button" id="toQuestions" class="primary">次へ</button>
+  </section>
 
     <!-- Step 2: 質問 -->
     <section id="step2" hidden>
